@@ -59,7 +59,7 @@
                                 }
                             }
                         }
-                        $('.tweet_link_' + i).prepend('<p><small> ' + tweet.created_at.substr(8, 2) + '/' + tweetMonth + '/' + tweet.created_at.substr(26,4) + ', ' + tweet.created_at.substr(11,5) + '</small></p>');
+                        $('.tweet_link_' + i).prepend('<p><a href="http://www.twitter.com/'+ defaults.username +'/statuses/'+ tweet.id_str +'"><small> ' + tweet.created_at.substr(4, 3) + ' ' + tweet.created_at.substr(8, 2) + ' ' + tweet.created_at.substr(26,4) + '</small></a></p>');
                     }
 					
                 });//close the unordered list
