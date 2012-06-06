@@ -47,7 +47,7 @@
                     
                     i = ctr++;
                     
-                    $tweetList.append('<li class="tweet_content_' + i + '"><p class="tweet_link_' + i + '">' + tweet.text.replace(/#(.*?)(\s|$)/g, '<span class="hash">#$1 </span>').replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$&">$&</a> ').replace(/@(.*?)(\s|\(|\)|$)/g, '<a href="http://twitter.com/$1">@$1 </a>$2') + '</p></li>');
+                    $tweetList.append('<li class="tweet_content_' + i + '"><p class="tweet_link_' + i + '">' + tweet.text.replace(/#(.*?)(\s|$)/g, '<span class="hash">#$1 </span>').replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$&">$&</a> ').replace(/@(.*?)(\s|\(|\)|$)/g, '<a class="mentioned" href="http://twitter.com/$1">@$1 </a>$2') + '</p></li>');
                     
                     //display the time of tweet if required
                     if (defaults.time == true) {
@@ -59,7 +59,7 @@
                                 }
                             }
                         }
-                        $('.tweet_link_' + i).prepend('<p><a href="http://www.twitter.com/'+ defaults.username +'/statuses/'+ tweet.id_str +'"><small> ' + tweet.created_at.substr(4, 3) + ' ' + tweet.created_at.substr(8, 2) + ' ' + tweet.created_at.substr(26,4) + '</small></a></p>');
+                        $('.tweet_link_' + i).prepend('<p><a href="http://www.twitter.com/'+ defaults.username +'/statuses/'+ tweet.id_str +'"><small> ' +relative_time(tweet.created_at)+ '</small></a></p>');
                     }
 					
                 });//close the unordered list
@@ -90,3 +90,28 @@
         });
     }
 })(jQuery);
+
+function relative_time(time_value) {
+  var values = time_value.split(" ");
+  time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
+  var parsed_date = Date.parse(time_value);
+  var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+  var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+  delta = delta + (relative_to.getTimezoneOffset() * 60);
+
+  if (delta < 60) {
+    return 'less than a minute ago';
+  } else if(delta < 120) {
+    return 'about a minute ago';
+  } else if(delta < (60*60)) {
+    return (parseInt(delta / 60)).toString() + ' minutes ago';
+  } else if(delta < (120*60)) {
+    return 'about an hour ago';
+  } else if(delta < (24*60*60)) {
+    return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+  } else if(delta < (48*60*60)) {
+    return '1 day ago';
+  } else {
+    return (parseInt(delta / 86400)).toString() + ' days ago';
+  }
+}
